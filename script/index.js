@@ -1,3 +1,21 @@
+// sescation a jae dhaka lagbe kamna kaj kore 
+const creatElement =(arr)=>{
+    const htmlElement = arr.map((el)=>`<span class="btn">${el}</span>` )  ;
+       return htmlElement.join(" ")
+}
+
+// loding spinn
+const manageSpinner=(status) =>{
+    if(status==true){
+        document.getElementById('spinner').classList.remove("hidden")
+        document.getElementById('word-continer').classList.add("hidden")
+    }
+    else{
+        document.getElementById('spinner').classList.add("hidden")
+        document.getElementById('word-continer').classList.remove("hidden")
+    }
+}
+
 const loadlessons =()=>{
     fetch("https://openapi.programming-hero.com/api/levels/all") //promise respons 
      .then(res=>res.json()) // pormise of json data 
@@ -11,6 +29,7 @@ const removeActive=()=>{
 }
 // load lavel word 
 const loadLevelWord=(id)=>{
+    manageSpinner(true)
     const url =`https://openapi.programming-hero.com/api/level/${id}`
     
     fetch(url)
@@ -29,10 +48,44 @@ const loadLevelWord=(id)=>{
 // loadWordDetail function
 const loadWordDetail = async(id)=>{
     const url = `https://openapi.programming-hero.com/api/word/${id} `
-    console.log(url)
+    // console.log(url)
     const res = await fetch(url);
     const details = await res.json();
-    console.log(details)
+    displayWordDetails (details.data)
+}
+const displayWordDetails =(word)=>{
+ console.log(word)
+ const detailsBox = document.getElementById("details-container")
+ detailsBox.innerHTML=`
+  <div class="">
+            <h2 class="text-2xl font-bold">
+               ${word.word} ( <i class="fa-solid fa-microphone-lines"></i>   :${word.pronunciation})
+            </h2>
+        </div>
+
+        
+    <div class="">
+        <h2 class=" font-bold">  Meaning </h2>
+
+        <p>${word.meaning}</p>
+
+    </div>
+    
+    <div class="">
+        <h2 class=" font-bold">  Example </h2>
+
+        <p>${word.sentence}</p>
+
+    </div>
+    <div class="">
+        <h2 class=" font-bold">  সমার্থক শব্দ গুলো</h2>
+
+     <div class="">${creatElement(word.synonyms)}  </div>
+    </div>
+ 
+ 
+ `
+ document.getElementById("word_modal").showModal()
 }
 
 // "id": 4,
@@ -60,6 +113,7 @@ const displayLevelWord=(words)=>{
 
        <h2 class="font-bold text-3xl">নেক্সট Lesson এ যান।</h2>
       </div>`;
+      manageSpinner(false)  
         return
     }
 
@@ -82,10 +136,14 @@ const displayLevelWord=(words)=>{
 
          // 4. appand child
          wordContiner.append(card)
-        
+       
+         
     });
 
+    manageSpinner(false)
+
 }
+
 
 // button ana 
 const displayLesson =(lessons)=>{
