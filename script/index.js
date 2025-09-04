@@ -6,7 +6,7 @@ const loadlessons =()=>{
 
 const removeActive=()=>{
     const lessonButtons = document.querySelectorAll(".lesson-btn")
-    console.log(lessonButtons)
+    // console.log(lessonButtons)
     lessonButtons.forEach(btn=>btn.classList.remove("active") )
 }
 // load lavel word 
@@ -26,14 +26,23 @@ const loadLevelWord=(id)=>{
      })
 }
 
-// {
+// loadWordDetail function
+const loadWordDetail = async(id)=>{
+    const url = `https://openapi.programming-hero.com/api/word/${id} `
+    console.log(url)
+    const res = await fetch(url);
+    const details = await res.json();
+    console.log(details)
+}
+
 // "id": 4,
 // "level": 5,
 // "word": "Diligent",
 // "meaning": "পরিশ্রমী",
 // "pronunciation": "ডিলিজেন্ট"
 // },
-
+ 
+// lavel word div 
 const displayLevelWord=(words)=>{
     // 1.get the continer
     const wordContiner = document.getElementById("word-continer")
@@ -66,7 +75,7 @@ const displayLevelWord=(words)=>{
         <div class=" text-2xl font-semibold font-bangla">" ${word.meaning ? word.meaning :"noo word"} / ${word.pronunciation ? word.pronunciation : "noo word"}"</div>
 
         <div class="flex justify-between items-center"> 
-            <button onclick="my_modal_5.showModal()" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80] "><i class="fa-solid fa-circle-info"></i></button>
+            <button onclick="loadWordDetail(${word.id})" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80] "><i class="fa-solid fa-circle-info"></i></button>
             <button class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80] "><i class="fa-solid fa-volume-high"></i></button>
         </div>
     </div>`
